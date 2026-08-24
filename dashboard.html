@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Lokatani</title>
+
+  <link rel="stylesheet" href="css/style.css?v=20260522-network-page" />
+  <script src="js/auth.js"></script>
+  <script>
+    window.LokasightAuth.requireLogin();
+  </script>
+  <script src="js/offline-icons.js"></script>
+</head>
+
+<body class="bg-[#f3f9f1] text-[#4f8250] font-sans antialiased">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 flex h-[72px] items-center justify-between bg-white px-6 shadow-[0_2px_10px_rgba(0,0,0,0.03)] border-b border-[#e6f0e3]">
+    <div class="dashboard-brand">
+      <img
+        src="assets/img/logo5.png"
+        alt="Logo Lokasight"
+        class="dashboard-logo-full"
+      />
+    </div>
+
+    <nav class="dashboard-nav" aria-label="Menu dashboard">
+      <a class="dashboard-nav-link active" href="dashboard.html">Dashboard</a>
+      <a class="dashboard-nav-link" href="dashboard-jaringan.html">Dashboard Jaringan</a>
+    </nav>
+
+    <div class="flex items-center gap-8 text-[14px]">
+      <div class="flex items-center gap-2 text-[#5a865b]">
+        <span>Status Sistem:</span>
+        <span id="systemStatusText" class="flex items-center gap-1.5 font-medium text-[#4caf50]">
+          <span id="systemStatusDot" class="h-2.5 w-2.5 rounded-full bg-[#4caf50]"></span>
+          Online
+        </span>
+      </div>
+
+      <div class="relative">
+        <button
+          id="notifBellBtn"
+          type="button"
+          class="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[#eef7eb]"
+        >
+          <i data-lucide="bell" class="h-6 w-6 text-[#4caf50]"></i>
+          <span
+            id="notifBadge"
+            class="absolute -right-1 -top-1 flex h-[24px] w-[24px] items-center justify-center rounded-full bg-[#f44336] text-[12px] font-bold text-white border-2 border-white"
+          >
+            2
+          </span>
+        </button>
+
+        <!-- Notification Panel -->
+        <div
+          id="notifPanel"
+          class="hidden absolute right-0 top-[52px] z-[60] w-[460px] max-h-[600px] overflow-hidden rounded-[24px] border border-[#d9e5d7] bg-[#f4f8f2] shadow-[0_16px_40px_rgba(0,0,0,0.12)]"
+        >
+                  <div
+          class="flex items-center justify-between border-b border-[#d9e5d7]"
+          style="padding: 10px 20px; min-height: 52px;"
+        >
+          <div class="flex items-center" style="gap: 10px;">
+            <h3
+              class="font-semibold text-[#2e7d32]"
+              style="font-size: 17px; line-height: 1; margin: 0;"
+            >
+              Notifikasi
+            </h3>
+
+            <span
+              id="notifCountPill"
+              class="bg-[#4caf50] text-white"
+              style="
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 28px;
+                min-width: 28px;
+                padding: 0 8px;
+                border-radius: 9999px;
+                font-size: 14px;
+                font-weight: 700;
+                line-height: 1;
+                flex-shrink: 0;
+                transform: translateY(0);
+              "
+            >
+              2
+            </span>
+          </div>
+
+          <button
+            id="closeNotifPanel"
+            type="button"
+            class="text-[#66bb6a] transition hover:text-[#43a047]"
+            style="
+              width: 36px;
+              height: 36px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <i data-lucide="x" class="h-5 w-5"></i>
+          </button>
+        </div>
+
+          <div id="notifList" class="max-h-[420px] overflow-y-auto"></div>
+
+          <button
+            id="markAllReadBtn"
+            type="button"
+            class="w-full border-t border-[#d9e5d7] bg-[#f4f8f2] px-6 py-4 text-center text-[16px] font-semibold text-[#4caf50] transition hover:bg-[#edf5ea]"
+          >
+            Tandai Sudah Dibaca
+          </button>
+        </div>
+      </div>
+
+      <button
+        id="logoutBtn"
+        type="button"
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-[#e8f5e9] text-[#2e7d32] transition hover:bg-[#c8e6c9]"
+        aria-label="Logout"
+        title="Logout"
+      >
+        <i data-lucide="log-out" class="h-5 w-5"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-[1100px] px-4 py-6">
+
+    <!-- Sensor Monitoring -->
+    <section class="rounded-[20px] border border-[#e2ece0] bg-white p-6 shadow-[0_4px_20px_rgba(114,132,96,0.08)] mb-6 md:p-8">
+      <div class="mb-6 flex items-center gap-4">
+        <div class="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#aed581] opacity-80">
+          <i data-lucide="thermometer" class="h-6 w-6 text-[#2e7d32]"></i>
+        </div>
+        <h2 class="text-[20px] font-semibold text-[#2e7d32]">Monitoring Sensor</h2>
+      </div>
+
+      <div class="sensor-layout">
+        <div class="sensor-value-column">
+          <div class="sensor-value-card">
+            <div class="sensor-label">Suhu</div>
+            <div id="tempValue" class="sensor-value">--°C</div>
+            <div class="sensor-updated">
+              <i data-lucide="clock" class="h-4 w-4"></i>
+              <span>Diperbarui: <span id="tempLastUpdated">--</span></span>
+            </div>
+          </div>
+
+          <div class="sensor-value-card">
+            <div class="sensor-label">Kelembaban</div>
+            <div id="humidityValue" class="sensor-value">--%</div>
+            <div class="sensor-updated">
+              <i data-lucide="clock" class="h-4 w-4"></i>
+              <span>Diperbarui: <span id="humidityLastUpdated">--</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sensor-chart-card">
+          <div class="sensor-chart-header">
+            <div>
+              <h3 id="activeChartTitle">Riwayat Suhu</h3>
+              <p id="activeChartSubtitle">Menampilkan riwayat suhu terbaru</p>
+            </div>
+
+            <button id="switchChartBtn" type="button" class="chart-switch-btn" title="Ganti chart">
+              <i data-lucide="chevron-right" class="h-6 w-6"></i>
+            </button>
+          </div>
+
+          <div class="sensor-chart-wrap">
+            <svg id="sensor-chart-svg" viewBox="0 0 571 200" class="h-[210px] w-full"></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Camera Viewer -->
+      <section class="bg-white p-6 rounded-[20px] shadow-[0_4px_20px_rgba(114,132,96,0.08)] mb-6 border border-[#e2ece0]">
+        <div class="mb-6 flex items-center gap-4">
+          <div class="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#aed581] opacity-80">
+            <i data-lucide="camera" class="h-6 w-6 text-[#2e7d32]"></i>
+          </div>
+          <h2 class="text-[20px] font-semibold text-[#2e7d32]">Tangkapan Kamera Terbaru</h2>
+        </div>
+
+        <div class="mb-6 flex items-center justify-center gap-5 text-[15px] text-[#388e3c]">
+          <button
+            id="prevCamBtn"
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#aed581] text-[#2e7d32] shadow-sm transition hover:bg-[#9ccc65]"
+          >
+            <i data-lucide="chevron-left" class="h-5 w-5"></i>
+          </button>
+
+          <div class="camera-title-wrap">
+            <span id="cam-title" class="camera-title-main">Mobile</span>
+            <span id="cam-subtitle" class="camera-title-sub">Capture dari aplikasi mobile</span>
+          </div>
+
+          <button
+            id="nextCamBtn"
+            type="button"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-[#aed581] text-[#2e7d32] shadow-sm transition hover:bg-[#9ccc65]"
+          >
+            <i data-lucide="chevron-right" class="h-5 w-5"></i>
+          </button>
+        </div>
+
+        <div class="overflow-hidden rounded-[24px] bg-[#edf5ea] border border-[#dce8d7]">
+          <div class="camera-main-preview">
+            <img
+              id="cam-img"
+              src=""
+              alt="Camera View"
+              class="camera-main-img"
+            />
+
+            <div id="cam-empty" class="camera-empty-state">
+              Belum ada gambar
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center justify-center gap-8 text-[14px] font-medium text-[#81c784]">
+          <div class="flex items-center gap-2 text-[#4caf50]">
+            <i data-lucide="clock" class="h-4 w-4"></i>
+            Gambar Terbaru: <span id="cam-time">-</span>
+          </div>
+        </div>
+      </section>
+
+    <!-- Disease Alert -->
+    <section
+      id="diseaseAlertSection"
+      class="rounded-[20px] border border-[#ff9800] bg-[#f6f5ec] p-6 shadow-[0_4px_20px_rgba(255,167,38,0.08)] mb-6 md:p-8"
+    >
+      <div class="mb-6 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#eadfc4]">
+            <i data-lucide="alert-triangle" class="h-6 w-6 text-[#ff9800]"></i>
+          </div>
+          <h2 class="text-[20px] font-semibold text-[#f26a00]">Peringatan Hama / Penyakit</h2>
+        </div>
+
+        <button
+          id="closeDiseaseAlertBtn"
+          type="button"
+          class="text-[#66bb6a] hover:text-[#4caf50] transition"
+        >
+          <i data-lucide="x" class="h-7 w-7"></i>
+        </button>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-[1fr_1fr] items-start">
+        <div class="overflow-hidden rounded-[24px] bg-[#dfe9dd] border border-[#d4e1d1]">
+          <div class="flex items-center justify-center h-[430px] p-4">
+            <img
+              id="disease-preview-img"
+              src="assets/img/disease-preview.svg"
+              alt="Disease Preview"
+              class="max-h-full max-w-full object-contain rounded-[18px]"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-between h-full">
+          <div>
+            <div id="disease-title" class="mb-2 text-[24px] font-semibold text-[#f26a00]">
+              Powdery Mildew
+            </div>
+
+            <div id="disease-time" class="mb-6 text-[14px] text-[#66bb6a]">
+              March 11, 2026 at 9:45 AM
+            </div>
+
+            <div class="mb-2 text-[16px] font-semibold text-[#1f7a35]">Deskripsi:</div>
+            <p id="disease-description" class="mb-6 text-[15px] leading-relaxed text-[#1f6b34]">
+              White powdery spots detected on leaf surfaces. This fungal infection can spread quickly in humid conditions.
+            </p>
+
+            <div class="mb-2 text-[16px] font-semibold text-[#1f7a35]">Solusi Rekomendasi:</div>
+            <p id="disease-solution" class="mb-8 text-[15px] leading-relaxed text-[#1f6b34]">
+              Remove affected leaves, increase air circulation, and apply organic fungicide. Monitor humidity levels closely.
+            </p>
+
+            <div class="mb-3 flex items-center gap-3 text-[15px]">
+              <span class="text-[#1f7a35]">Skor Kepercayaan:</span>
+              <div class="h-4 flex-1 overflow-hidden rounded-full bg-[#dbe6da]">
+                <div id="disease-confidence-bar" class="h-full w-[92%] rounded-full bg-[#ff2d2d]"></div>
+              </div>
+              <span id="disease-confidence-text" class="font-semibold text-[#f26a00]">92%</span>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-4">
+            <button
+              id="markHandledBtn"
+              type="button"
+              class="flex items-center gap-2 rounded-[16px] bg-[#4caf50] px-8 py-4 text-[15px] font-semibold text-white shadow-md hover:bg-[#43a047] transition"
+            >
+              <i data-lucide="check-circle" class="h-5 w-5"></i>
+              Tandai sudah Ditangani
+            </button>
+
+            <button
+              id="closeDiseaseBtn"
+              type="button"
+              class="rounded-[16px] bg-[#a5d6a7] px-8 py-4 text-[15px] font-semibold text-[#1f6b34] hover:bg-[#97cd99] transition"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-5 pb-12">
+      <button id="openCameraModal" class="rounded-xl bg-[#4caf50] px-8 py-4 text-[15px] font-semibold text-white shadow-md hover:bg-[#43a047] transition">
+        Lihat Riwayat Kamera Lengkap
+      </button>
+      <button id="openDiseaseModal" class="rounded-xl bg-[#f57c00] px-8 py-4 text-[15px] font-semibold text-white shadow-md hover:bg-[#ef6c00] transition">
+        Lihat Riwayat Penyakit
+      </button>
+      <button id="openPestModal" class="pest-history-button rounded-xl px-8 py-4 text-[15px] font-semibold text-white shadow-md transition">
+        Lihat Riwayat Hama
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Modal Overlay -->
+  <div id="modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+
+    <!-- Camera Modal -->
+    <div id="modal-camera" class="hidden relative w-full max-w-[1000px] rounded-[24px] bg-white shadow-2xl">
+      <div class="flex items-center justify-between border-b border-[#e2ece0] px-6 py-5">
+        <div class="flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#dcedc8]">
+            <i data-lucide="camera" class="h-5 w-5 text-[#33691e]"></i>
+          </div>
+          <div class="text-[18px] font-semibold text-[#33691e]">Riwayat Kamera</div>
+        </div>
+
+        <button id="closeModal" type="button" class="text-[#81c784] hover:text-[#4caf50] transition">
+          <i data-lucide="x" class="h-6 w-6"></i>
+        </button>
+      </div>
+
+      <div class="p-6">
+        <div id="cam-history-grid" class="grid gap-5 grid-cols-1 md:grid-cols-3 max-h-[500px] overflow-y-auto pr-2"></div>
+        <div id="cam-history-pagination" class="mt-5 flex flex-wrap items-center justify-between gap-3"></div>
+      </div>
+    </div>
+
+    <!-- Disease Modal -->
+    <div id="modal-disease" class="hidden relative w-full max-w-[1050px] rounded-[24px] bg-[#fffdf7] shadow-2xl border border-[#ffe0b2]">
+      <div class="flex items-center justify-between border-b border-[#ffe0b2] bg-[#fff8e1] px-6 py-5 rounded-t-[24px]">
+        <div class="flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-[12px] bg-[#ffecb3]">
+            <i data-lucide="alert-triangle" class="h-5 w-5 text-[#e65100]"></i>
+          </div>
+          <div id="diseaseHistoryTitle" class="text-[18px] font-semibold text-[#e65100]">Riwayat Penyakit</div>
+        </div>
+
+        <button id="closeDiseaseModal" type="button" class="text-[#ffb74d] hover:text-[#f57c00] transition">
+          <i data-lucide="x" class="h-6 w-6"></i>
+        </button>
+      </div>
+
+      <div class="p-6">
+        <div id="disease-history-grid" class="grid gap-5 grid-cols-1 md:grid-cols-3 max-h-[500px] overflow-y-auto pr-2"></div>
+        <div id="disease-history-pagination" class="mt-5 flex flex-wrap items-center justify-between gap-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Image Preview Modal -->
+  <!-- Full Image Preview Modal -->
+<div
+  id="imagePreviewOverlay"
+  style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.88);
+    padding: 16px;
+  "
+>
+  <div
+    style="
+      position: relative;
+      max-width: 95vw;
+      max-height: 95vh;
+      z-index: 2147483647;
+    "
+  >
+    <button
+      id="closeImagePreview"
+      type="button"
+      style="
+        position: absolute;
+        right: -12px;
+        top: -12px;
+        z-index: 2147483647;
+        width: 42px;
+        height: 42px;
+        border-radius: 9999px;
+        border: none;
+        background: white;
+        color: #4caf50;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      "
+    >
+      ×
+    </button>
+
+    <img
+      id="imagePreviewImg"
+      src=""
+      alt="Full Camera Preview"
+      style="
+        display: block;
+        max-width: 95vw;
+        max-height: 90vh;
+        object-fit: contain;
+        border-radius: 18px;
+        background: white;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+      "
+    />
+
+    <div
+      id="imagePreviewTitle"
+      style="
+        margin-top: 12px;
+        text-align: center;
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+      "
+    ></div>
+  </div>
+</div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script src="js/dashboard.js?v=20260601-local-offline-3"></script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Jaringan - Lokatani</title>
+
+  <link rel="stylesheet" href="css/style.css?v=20260522-network-page" />
+  <script src="js/auth.js"></script>
+  <script>
+    window.LokasightAuth.requireLogin();
+  </script>
+  <script src="js/offline-icons.js"></script>
+</head>
+
+<body class="bg-[#f3f9f1] text-[#4f8250] font-sans antialiased">
+  <header class="sticky top-0 z-50 flex h-[72px] items-center justify-between bg-white px-6 shadow-[0_2px_10px_rgba(0,0,0,0.03)] border-b border-[#e6f0e3]">
+    <div class="dashboard-brand">
+      <img
+        src="assets/img/logo5.png"
+        alt="Logo Lokasight"
+        class="dashboard-logo-full"
+      />
+    </div>
+
+    <nav class="dashboard-nav" aria-label="Menu dashboard">
+      <a class="dashboard-nav-link" href="dashboard.html">Dashboard</a>
+      <a class="dashboard-nav-link active" href="dashboard-jaringan.html">Dashboard Jaringan</a>
+    </nav>
+
+    <div class="flex items-center gap-8 text-[14px]">
+      <div class="flex items-center gap-2 text-[#5a865b]">
+        <span>Status Jaringan:</span>
+        <span id="networkStatusText" class="flex items-center gap-1.5 font-medium text-[#4caf50]">
+          <span id="networkStatusDot" class="h-2.5 w-2.5 rounded-full bg-[#4caf50]"></span>
+          Checking
+        </span>
+      </div>
+
+      <div class="relative">
+        <button
+          id="notifBellBtn"
+          type="button"
+          class="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[#eef7eb]"
+          aria-label="Notifikasi"
+          title="Notifikasi"
+        >
+          <i data-lucide="bell" class="h-6 w-6 text-[#4caf50]"></i>
+          <span
+            id="notifBadge"
+            class="absolute -right-1 -top-1 hidden h-[24px] w-[24px] items-center justify-center rounded-full bg-[#f44336] text-[12px] font-bold text-white border-2 border-white"
+          >
+            0
+          </span>
+        </button>
+
+        <div
+          id="notifPanel"
+          class="hidden absolute right-0 top-[52px] z-[60] w-[460px] max-h-[600px] overflow-hidden rounded-[24px] border border-[#d9e5d7] bg-[#f4f8f2] shadow-[0_16px_40px_rgba(0,0,0,0.12)]"
+        >
+          <div
+            class="flex items-center justify-between border-b border-[#d9e5d7]"
+            style="padding: 10px 20px; min-height: 52px;"
+          >
+            <div class="flex items-center" style="gap: 10px;">
+              <h3
+                class="font-semibold text-[#2e7d32]"
+                style="font-size: 17px; line-height: 1; margin: 0;"
+              >
+                Notifikasi
+              </h3>
+
+              <span
+                id="notifCountPill"
+                class="bg-[#4caf50] text-white"
+                style="
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  height: 28px;
+                  min-width: 28px;
+                  padding: 0 8px;
+                  border-radius: 9999px;
+                  font-size: 14px;
+                  font-weight: 700;
+                  line-height: 1;
+                  flex-shrink: 0;
+                  transform: translateY(0);
+                "
+              >
+                0
+              </span>
+            </div>
+
+            <button
+              id="closeNotifPanel"
+              type="button"
+              class="text-[#66bb6a] transition hover:text-[#43a047]"
+              style="
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+              aria-label="Tutup notifikasi"
+              title="Tutup notifikasi"
+            >
+              <i data-lucide="x" class="h-5 w-5"></i>
+            </button>
+          </div>
+
+          <div id="notifList" class="max-h-[420px] overflow-y-auto"></div>
+
+          <button
+            id="markAllReadBtn"
+            type="button"
+            class="w-full border-t border-[#d9e5d7] bg-[#f4f8f2] px-6 py-4 text-center text-[16px] font-semibold text-[#4caf50] transition hover:bg-[#edf5ea]"
+          >
+            Tandai Sudah Dibaca
+          </button>
+        </div>
+      </div>
+
+      <button
+        id="logoutBtn"
+        type="button"
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-[#e8f5e9] text-[#2e7d32] transition hover:bg-[#c8e6c9]"
+        aria-label="Logout"
+        title="Logout"
+      >
+        <i data-lucide="log-out" class="h-5 w-5"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[1100px] px-4 py-6">
+    <div class="network-page-title">
+      <h1>Dashboard Jaringan</h1>
+      <p>Monitoring kualitas koneksi, status perangkat, dan metrik QoS.</p>
+    </div>
+
+    <!-- <section class="qos-section" id="qosSection">
+      <div class="qos-header">
+        <div>
+          <h2>Network & QoS Monitoring</h2>
+          <p id="qosDataSource">Membaca qos_live.json, qos_latest.json, atau qos_history.json otomatis.</p>
+        </div>
+      </div> -->
+
+      <div class="qos-status-grid">
+        <div class="qos-stat-card">
+          <span>Raspberry Pi</span>
+          <strong id="piStatus">Checking...</strong>
+        </div>
+        <div class="qos-stat-card">
+          <span>Uptime Raspi</span>
+          <strong id="piUptime">Checking...</strong>
+        </div>
+        <div class="qos-stat-card">
+          <span>API Inference</span>
+          <strong id="gcpStatus">Checking...</strong>
+        </div>
+        <div class="qos-stat-card">
+          <span>DHT Sensor</span>
+          <strong id="dhtStatus">Checking...</strong>
+        </div>
+      </div>
+
+      <div class="qos-metric-grid">
+        <div class="qos-metric-card">
+          <span>Latency</span>
+          <strong id="latencyValue">0 s</strong>
+        </div>
+        <div class="qos-metric-card">
+          <span>Jitter</span>
+          <strong id="jitterValue">0 s</strong>
+        </div>
+        <div class="qos-metric-card">
+          <span>Packet Loss</span>
+          <strong id="packetLossValue">0%</strong>
+        </div>
+        <div class="qos-metric-card">
+          <span>Network Throughput</span>
+          <strong id="throughputValue">0 Mbps</strong>
+        </div>
+        <div class="qos-metric-card">
+          <span>CPU Usage</span>
+          <strong id="cpuUsageValue">0%</strong>
+        </div>
+        <div class="qos-metric-card">
+          <span>Memory Usage</span>
+          <strong id="memoryUsageValue">0%</strong>
+        </div>
+      </div>
+
+      <div class="qos-chart-card">
+        <div class="qos-chart-header">
+          <div>
+            <h3>Grafik QoS</h3>
+            <p>Setiap metrik jaringan ditampilkan terpisah agar skala datanya mudah dibaca.</p>
+          </div>
+          <span id="qosPointCount">0 data</span>
+        </div>
+        <div id="qosChartsGrid" class="qos-charts-grid"></div>
+      </div>
+
+      <div class="qos-alert-card">
+        <div class="qos-chart-header">
+          <div>
+            <h3>System Alerts</h3>
+            <p>Status kualitas jaringan berdasarkan ambang batas QoS.</p>
+          </div>
+        </div>
+        <div id="alertContainer" class="qos-alert-list">
+          <p>No alerts</p>
+        </div>
+      </div>
+
+      <div class="qos-log-card">
+        <div class="qos-chart-header">
+          <div>
+            <h3>Log Anomali Jaringan</h3>
+            <p>Riwayat kejadian anomali dari data QoS yang terbaca.</p>
+          </div>
+          <span id="qosAnomalyCount">0 anomali</span>
+        </div>
+        <div class="qos-log-table-wrap">
+          <table class="qos-log-table">
+            <thead>
+              <tr>
+                <th>Waktu</th>
+                <th>Kejadian</th>
+                <th>Nilai</th>
+                <th>Ambang</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="qosAnomalyTableBody">
+              <tr>
+                <td colspan="5" class="qos-log-empty">Belum ada anomali</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/qos.js?v=20260522-network-page"></script>
+</body>
+</html>

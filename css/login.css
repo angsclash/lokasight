@@ -1,0 +1,303 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #eef6e8;
+  color: #2f7a37;
+}
+
+/* ========================= */
+/* LOGIN PAGE */
+/* ========================= */
+
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* ========================= */
+/* BACKGROUND ICON CUSTOM */
+/* ========================= */
+
+.login-bg-icon {
+  position: absolute;
+  z-index: 1;
+  opacity: 1;
+  pointer-events: none;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+}
+
+/* kiri atas */
+.bg-icon-1 {
+  left: 32px;
+  top: 40px;
+  width: 128px;
+  height: 128px;
+  transform: rotate(12deg);
+}
+
+/* kanan atas */
+.bg-icon-2 {
+  right: 64px;
+  top: 208px;
+  width: 96px;
+  height: 96px;
+  transform: rotate(-12deg);
+}
+
+/* kiri bawah */
+.bg-icon-3 {
+  left: 80px;
+  bottom: 64px;
+  width: 144px;
+  height: 144px;
+  transform: rotate(45deg);
+}
+
+/* kanan bawah */
+.bg-icon-4 {
+  right: 96px;
+  bottom: 40px;
+  width: 192px;
+  height: 192px;
+  transform: rotate(-45deg);
+}
+
+/* ========================= */
+/* LOGIN CARD */
+/* ========================= */
+
+.login-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 560px;
+  background: #ffffff;
+  border: 1px solid #d9e2d4;
+  border-radius: 22px;
+  padding: 48px;
+  box-shadow: 0 12px 28px rgba(112, 138, 104, 0.18);
+}
+
+/* ========================= */
+/* BRAND / LOGO */
+/* ========================= */
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.brand-logo-full {
+  width: 220px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.brand-icon {
+  width: 56px;
+  height: 56px;
+  background: #4caf50;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.brand-icon i {
+  width: 28px;
+  height: 28px;
+}
+
+.brand-text {
+  font-size: 28px;
+  font-weight: 600;
+  color: #4da84d;
+}
+
+/* ========================= */
+/* WELCOME TEXT */
+/* ========================= */
+
+.welcome {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.welcome h1 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2f7a37;
+  margin-bottom: 12px;
+}
+
+.welcome p {
+  font-size: 18px;
+  color: #63b365;
+}
+
+/* ========================= */
+/* FORM */
+/* ========================= */
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2e7a37;
+}
+
+.form-group input {
+  width: 100%;
+  height: 64px;
+  border-radius: 16px;
+  border: 1px solid #d8e4d1;
+  background: #eef5e7;
+  padding: 0 20px;
+  font-size: 16px;
+  outline: none;
+  color: #2f7a37;
+}
+
+.form-group input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+}
+
+.form-group input::placeholder {
+  color: #6b7280;
+}
+
+/* ========================= */
+/* ERROR */
+/* ========================= */
+
+.login-error {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ef4444;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ========================= */
+/* BUTTON */
+/* ========================= */
+
+button {
+  width: 100%;
+  height: 64px;
+  border: none;
+  border-radius: 16px;
+  background: #4caf50;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  filter: brightness(1.05);
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 640px) {
+  .login-page {
+    padding: 18px;
+  }
+
+  .login-card {
+    padding: 32px 24px;
+  }
+
+  .brand-logo-full {
+    width: 190px;
+  }
+
+  .brand-text {
+    font-size: 24px;
+  }
+
+  .welcome h1 {
+    font-size: 20px;
+  }
+
+  .welcome p {
+    font-size: 15px;
+  }
+
+  .form-group label {
+    font-size: 16px;
+  }
+
+  .form-group input {
+    height: 58px;
+    font-size: 15px;
+  }
+
+  button {
+    height: 58px;
+    font-size: 16px;
+  }
+
+  .login-bg-icon {
+    opacity: 0.12;
+  }
+
+  .bg-icon-1 {
+    left: 20px;
+    top: 36px;
+    width: 90px;
+    height: 90px;
+  }
+
+  .bg-icon-2 {
+    right: 24px;
+    top: 170px;
+    width: 72px;
+    height: 72px;
+  }
+
+  .bg-icon-3 {
+    left: 24px;
+    bottom: 90px;
+    width: 100px;
+    height: 100px;
+  }
+
+  .bg-icon-4 {
+    right: 20px;
+    bottom: 40px;
+    width: 130px;
+    height: 130px;
+  }
+}
