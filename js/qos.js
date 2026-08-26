@@ -17,6 +17,7 @@ function logout() {
 }
 
 const QOS_AUTO_PATHS = [
+  "api/qos-live",
   "qos/qos_live.json",
   "qos/qos_history.json",
   "qos/qos_latest.json",
