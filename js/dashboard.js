@@ -23,19 +23,22 @@ function logout() {
 // FIREBASE CONFIG
 // =========================
 const FIREBASE_DB_URL =
-  "https://lokasighthama-default-rtdb.asia-southeast1.firebasedatabase.app";
+  "https://lokasight-90e41-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCdaUiXjPKl3qFU5SVM3IHzl3AwSzcxmXs",
-  authDomain: "lokasighthama.firebaseapp.com",
-  databaseURL: "https://lokasighthama-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "lokasighthama",
-  storageBucket: "lokasighthama.firebasestorage.app",
-  messagingSenderId: "605793328107",
-  appId: "1:605793328107:web:863de565b5fc30bf6617ae",
-  measurementId: "G-NJ7Z596C2S"
+  apiKey: "AIzaSyDYgLkk1l9efI1DKlAvEr48hOQ9h82Qazw",
+  authDomain: "lokasight-90e41.firebaseapp.com",
+  databaseURL: "https://lokasight-90e41-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "lokasight-90e41",
+  storageBucket: "lokasight-90e41.firebasestorage.app",
+  messagingSenderId: "929262769346",
+  appId: "1:929262769346:web:a77154fa158e52b095975b",
+  measurementId: "G-ER48LY4V6Q"
 };
+
 
 let firebaseAuth = null;
 
