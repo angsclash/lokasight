@@ -1,0 +1,48 @@
+{
+  "_comment_gcp_api_url": "GANTI: endpoint health Google Cloud kamu, biasanya Cloud Run/Cloud Functions/API Gateway. Contoh: https://lokasight-api-xxxxx.a.run.app/health",
+  "gcp_api_url": "https://lokasight-inference-api-666996001677.asia-southeast2.run.app/health",
+
+  "_comment_local_api_url": "GANTI jika endpoint lokal Raspberry Pi berbeda. Dipakai saat internet/GCP tidak tersedia.",
+  "local_api_url": "http://127.0.0.1:8000/health",
+
+  "_comment_ping_target_online": "GANTI opsional: target ping saat mode online. Bisa IP publik GCP/load balancer, domain API, atau tetap DNS Google.",
+  "ping_target_online": "8.8.8.8",
+
+  "_comment_ping_target_offline": "GANTI opsional: target ping jaringan lokal saat mode offline, misalnya gateway/router lokal.",
+  "ping_target_offline": "192.168.1.2",
+
+  "_comment_throughput_test_url_online": "GANTI: endpoint/file Google Cloud untuk tes throughput. Idealnya endpoint yang mengirim payload cukup besar, contoh /throughput-test.",
+  "throughput_test_url_online": "https://lokasight-inference-api-666996001677.asia-southeast2.run.app/throughput-test",
+
+  "_comment_throughput_test_url_offline": "GANTI opsional: endpoint lokal untuk tes throughput saat offline. Kosongkan dengan null kalau belum ada.",
+  "throughput_test_url_offline": "http://127.0.0.1:8000/throughput-test",
+
+  "_comment_firebase_database_url": "GANTI jika Firebase Realtime Database project berbeda. Dipakai untuk notifikasi dan heartbeat Raspberry Pi.",
+  "firebase_database_url": "https://lokasight-90e41-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+  "_comment_image_dir": "GANTI jika folder gambar/capture di Raspberry Pi berbeda.",
+  "image_dir": "assets",
+
+  "_comment_dht_status_path": "GANTI jika file status DHT22 dibuat di lokasi lain.",
+  "dht_status_path": "qos/dht_latest.json",
+
+  "mode": "auto",
+  "source": "raspberry_pi",
+  "total_requests": 40,
+  "delay_between_requests": 150,
+  "run_forever": true,
+  "max_history_points": 120,
+  "result_dir": "qos",
+  "throughput_test_bytes": 1000000,
+  "dht_fresh_seconds": 60,
+
+  "firebase_auth_token": "",
+  "firebase_api_key": "",
+  "firebase_auth_email": "",
+  "firebase_auth_password": "",
+  "firebase_notifications_enabled": false,
+  "firebase_notifications_path": "notifications",
+  "notification_cooldown_minutes": 60,
+  "pi_heartbeat_enabled": false,
+  "pi_heartbeat_path": "system/raspberry_pi"
+}
