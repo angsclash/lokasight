@@ -15,6 +15,11 @@ function mean(arr) {
   return Number((v.reduce((a, b) => a + b, 0) / v.length).toFixed(6));
 }
 
+// GANTI kalau file dummy ini masih dipakai dan kamu ingin metadata menampilkan endpoint Google Cloud asli.
+const DEMO_GCP_HEALTH_URL = "https://lokasight-inference-api-666996001677.asia-southeast2.run.app/health";
+// GANTI kalau file dummy ini masih dipakai dan kamu ingin metadata menampilkan endpoint throughput Google Cloud asli.
+const DEMO_GCP_THROUGHPUT_URL = "https://lokasight-inference-api-666996001677.asia-southeast2.run.app/throughput-test";
+
 function buildRow(index, ts, anomaly) {
   const wave = Math.sin(index / 6) * 0.5 + 0.5;
 
@@ -44,9 +49,9 @@ function buildRow(index, ts, anomaly) {
     time: ts.toTimeString().slice(0, 8),
     request_number: index + 1,
     system_mode: "online",
-    api_url: "https://lokasight-api.example.com/health",
+    api_url: DEMO_GCP_HEALTH_URL,
     ping_target: "8.8.8.8",
-    throughput_test_url: "https://lokasight-api.example.com/throughput-test",
+    throughput_test_url: DEMO_GCP_THROUGHPUT_URL,
     cpu_usage_percent: cpu,
     memory_usage_percent: memory,
     packet_loss_percent: packetLoss,
@@ -101,7 +106,7 @@ export default function handler(req, res) {
   const live = {
     updated_at: now.toISOString(),
     system_mode: "online",
-    api_url: "https://lokasight-api.example.com/health",
+    api_url: DEMO_GCP_HEALTH_URL,
     ping_target: "8.8.8.8",
     raspberry_pi_uptime_seconds: 267340,
     system_status: {
