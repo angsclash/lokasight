@@ -35,6 +35,15 @@ const QOS_AUTO_PATHS = [
   "lokasight/data/qos_latest.json"
 ];
 
+const GCP_QOS_ENDPOINT =
+  // GANTI opsional: isi window.LOKASIGHT_GCP_ENDPOINT di HTML kalau mau dashboard QoS selalu baca endpoint Google Cloud tertentu.
+  window.LOKASIGHT_GCP_ENDPOINT ||
+  // GANTI opsional via URL browser, contoh: dashboard-jaringan.html?gcpEndpoint=https://YOUR_GOOGLE_CLOUD_ENDPOINT/qos-live
+  new URLSearchParams(window.location.search).get("https://lokasight-inference-api-666996001677.asia-southeast2.run.app") ||
+  // GANTI opsional via DevTools: localStorage.setItem("lokasightGcpEndpoint", "https://YOUR_GOOGLE_CLOUD_ENDPOINT/qos-live")
+  localStorage.getItem("https://lokasight-inference-api-666996001677.asia-southeast2.run.app") ||
+  "";
+
 const qosSeriesConfig = [
   { key: "avg_latency_seconds", label: "Latency", unit: "s", color: "#2e7d32" },
   { key: "jitter_seconds", label: "Jitter", unit: "s", color: "#f57c00" },
@@ -48,7 +57,8 @@ const WIB_TIMEZONE = "Asia/Jakarta";
 const QOS_ANOMALY_LIMIT = 30;
 const QOS_CHART_POINT_LIMIT = 10;
 const QOS_FRESH_WINDOW_MS = 10 * 60 * 1000;
-const FIREBASE_DB_URL = "https://lokasighthama-default-rtdb.asia-southeast1.firebasedatabase.app";
+// GANTI kalau notifikasi QoS pindah ke Firebase Realtime Database project lain.
+const FIREBASE_DB_URL = "https://lokasight-90e41-default-rtdb.asia-southeast1.firebasedatabase.app";
 const FIREBASE_NOTIFICATIONS_URL = `${FIREBASE_DB_URL}/notifications.json`;
 const SHOWN_NOTIF_KEY = "shownNotificationKeys";
 const NOTIFICATION_CACHE_KEY = "dashboardNotifications";
@@ -987,6 +997,22 @@ function applyQoSRecords(records, sourceLabel) {
 }
 
 async function loadQoSFromKnownPaths() {
+  if (GCP_QOS_ENDPOINT) {
+    try {
+      const endpointUrl = new URL(GCP_QOS_ENDPOINT, window.location.href);
+      endpointUrl.searchParams.set("t", Date.now());
+      const response = await fetch(endpointUrl, { cache: "no-store" });
+
+      if (response.ok) {
+        const payload = await response.json();
+        const records = extractQoSRecords(payload, "GCP");
+        if (records.length && applyQoSRecords(records, "GCP")) return true;
+      }
+    } catch (error) {
+      console.warn("GCP QoS endpoint tidak dapat diakses:", error);
+    }
+  }
+
   let bestRecords = [];
   let bestPath = "";
 
