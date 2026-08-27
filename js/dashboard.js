@@ -3595,9 +3595,6 @@ async function fetchFirebaseNotifications() {
 // QOS MONITORING
 // =========================
 const QOS_AUTO_PATHS = [
-  "qos_history.json",
-  "qos_live.json",
-  "qos_latest.json",
   "qos/qos_history.json",
   "qos/qos_live.json",
   "qos/qos_latest.json",
