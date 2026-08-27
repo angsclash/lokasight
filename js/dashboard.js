@@ -3601,15 +3601,6 @@ const QOS_AUTO_PATHS = [
   "qos/qos_history.json",
   "qos/qos_live.json",
   "qos/qos_latest.json",
-  "data/qos_history.json",
-  "data/qos_live.json",
-  "data/qos_latest.json",
-  "lokasight/qos_history.json",
-  "lokasight/qos_live.json",
-  "lokasight/qos_latest.json",
-  "lokasight/data/qos_history.json",
-  "lokasight/data/qos_live.json",
-  "lokasight/data/qos_latest.json"
 ];
 
 const qosSeriesConfig = [
