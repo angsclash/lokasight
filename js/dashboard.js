@@ -23,7 +23,7 @@ function logout() {
 // FIREBASE CONFIG
 // =========================
 const FIREBASE_DB_URL =
-  "https://lokasight-90e41-default-rtdb.asia-southeast1.firebasedatabase.app/";
+  "https://lokasight-90e41-default-rtdb.asia-southeast1.firebasedatabase.app";
 
 
 // Your web app's Firebase configuration
